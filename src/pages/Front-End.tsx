@@ -5,7 +5,6 @@ import ArenaLogo from "../assets/ArenaLogo.png";
 import DgateLogo from "../assets/DgateLogo.png";
 import KnetLogo from "../assets/KnetLogo.png";
 import Card from "../components/Card";
-
 interface ProjectType {
   name: string;
   img: string;
