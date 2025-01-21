@@ -1,0 +1,120 @@
+
+@use "variables" as *;
+@use "sass:color";
+
+// CSS reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+// Layout
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+
+
+
+.main-content {
+  flex: 1;
+  padding: $spacing-md;
+  overflow-y: auto;
+  background-color: var(--background-color);
+  transition: all 0.3s ease-in-out;
+  color: var(--text-color);
+
+  &.sidebar-open {
+    margin-left: 256px;
+    width: calc(100% - 256px);
+  }
+  
+  &.sidebar-closed {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+
+  // Component container styles
+  .component-container {
+    transition: all 0.3s ease-in-out;
+    padding: $spacing-md;
+    background-color: var(--paper-background);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &.sidebar-open {
+      max-width: calc(100vw - 256px - #{$spacing-lg});
+    }
+    
+    &.sidebar-closed {
+      max-width: calc(100vw - 80px - #{$spacing-lg});
+    }
+  }
+
+  // Stepper container
+  .stepper-container {
+    display: flex;
+    gap: $spacing-lg;
+    margin-top: $spacing-lg;
+    transition: all 0.3s ease-in-out;
+
+    .progress-stepper,
+    .vertical-stepper {
+      flex: 1;
+      min-width: 0;
+      transition: all 0.3s ease-in-out;
+      background-color: var(--paper-background);
+      border-radius: 8px;
+      padding: $spacing-md;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .main-content {
+    &.sidebar-open,
+    &.sidebar-closed {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  .stepper-container {
+    flex-direction: column;
+  }
+}
+
