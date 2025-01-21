@@ -1,0 +1,52 @@
+.frontend-page {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+
+  .page-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .page-desc {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #374151;
+  }
+
+  .projects-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    .project-card {
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &.selected-card {
+        position: relative;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+        border: 2px solid transparent;
+        font-family: "Urbanist", serif;
+        font-optical-sizing: auto;
+        border-image: linear-gradient(45deg, #41C9C3, #3A66D8, #3D0B37) 1;
+      }
+    }
+  }
+}

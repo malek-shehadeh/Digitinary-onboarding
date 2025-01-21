@@ -1,0 +1,17 @@
+.coworkers-page {
+    padding: 20px;
+  
+    h1 {
+      margin-bottom: 40px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+  
+    .coworkers-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content:center;
+    }
+  }
+  
