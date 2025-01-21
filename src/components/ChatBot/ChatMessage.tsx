@@ -43,7 +43,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onQuickReplyClick })
           {message.quickReplies.map((reply) => (
             <Button
               key={reply.id}
-              variant="outline"
+              variant="default"
               size="sm"
               className="rounded-full hover:bg-primary hover:text-primary-foreground"
               onClick={() => onQuickReplyClick?.(reply)}

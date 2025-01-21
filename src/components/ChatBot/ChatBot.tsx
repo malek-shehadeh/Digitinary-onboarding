@@ -155,11 +155,11 @@ const ChatBot: React.FC<ChatBotProps> = ({
   }
 
   return (
-    <Card className={`fixed bottom-4 right-4 z-50 transition-all duration-300 ${
-      isOpen ? 'w-96 h-[600px]' : 'w-auto h-auto'
-    }`}>
-      {isOpen ? chatContent : <ChatToggleButton onClick={toggleChat} />}
-    </Card>
+<Card className={`fixed bottom-4 right-4 z-50 transition-all duration-300 ${
+  isOpen ? 'w-96 h-[600px] bg-white dark:bg-neutral-950' : 'w-auto h-auto bg-transparent'
+}`}>
+  {isOpen ? chatContent : <ChatToggleButton onClick={toggleChat} />}
+</Card>
   );
 };
 
