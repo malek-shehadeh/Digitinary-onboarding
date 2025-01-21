@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar";
 import FrontEnd from "./pages/Front-End";
 import CoWorkersPage from "./pages/CoworkersPage"; 
@@ -15,6 +16,7 @@ const ProductManagerPage = () => <h2>Product Manager</h2>;
 function App() {
   return(
     <Router>
+      <Navbar/>
       <Sidebar />
     <div className='text-6xl '>
       <Routes>
