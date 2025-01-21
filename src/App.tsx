@@ -3,7 +3,10 @@ import './App.css'
 
 function App() {
   return(
-    <Button>Hi</Button> 
+    <div className='text-6xl '>
+
+      <Button>Hi</Button> 
+    </div>
   )
 }
 
