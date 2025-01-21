@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+
+// Sidebar.tsx
+import React, { useState} from "react";
 import {
   Code,
   GitMerge,
@@ -8,11 +10,13 @@ import {
   DollarSign,
   Box,
   Users,
+  ChevronLeft,
+  
 } from "lucide-react";
-
 import { Link, useNavigate } from "react-router-dom";
 import "../Style/Sidebar.scss";
 import logo from "../assets/Digitinary-Logo.png";
+import logoIcon from "../assets/digitinary_icon.png"; // Make sure you have this icon version
 import user1 from "../assets/user1.png";
 import user2 from "../assets/user2.png";
 import user3 from "../assets/user3.png";
@@ -24,6 +28,7 @@ import tasneemAvatar from "../assets/taneemAvater.png";
 const Sidebar: React.FC = () => {
   const [isFrontEndSelected, setIsFrontEndSelected] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
 
   const menuItems = [
@@ -88,67 +93,89 @@ const Sidebar: React.FC = () => {
     setActiveCategory(category);
   };
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="sidebar-wrapper open">
-      <aside className="sidebar">
+    <div className="sidebar-wrapper">
+      <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <button 
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
+          style={{
+            transform: `translateY(-50%) ${isOpen ? '' : 'rotate(180deg)'}`,
+          }}
+        >
+          <ChevronLeft 
+            className="h-5 w-5"
+            style={{
+              transform: `${isOpen ? '' : 'rotate(180deg)'}`,
+              transition: 'transform 0.3s ease-in-out'
+            }}
+          />
+        </button>
+
         <div className="sidebar-header">
           <div className="logo">
             <Link to="/">
-              <img src={logo} alt="Digitinary Logo" className="logo-image" />
+              <img 
+                src={isOpen ? logo : logoIcon} 
+                alt="Digitinary Logo" 
+                className={`logo-image ${!isOpen ? 'logo-icon' : ''}`}
+              />
             </Link>
           </div>
         </div>
+
         <div className="sidebar-content">
-          <h2>Departments</h2>
+          {isOpen && <h2>Departments</h2>}
           <nav className="sidebar-menu">
             {menuItems.map(({ category, icon, path, onClick }) => (
               <Link
                 key={category}
                 to={path}
-                className={`menu-item ${
-                  activeCategory === category ? "active" : ""
-                }`}
+                className={`menu-item ${activeCategory === category ? "active" : ""}`}
                 onClick={() => {
                   handleMenuItemClick(category);
-                  onClick && onClick();
+                  if (onClick) onClick();
                 }}
               >
                 <span className="menu-item-icon">{icon}</span>
-                <span>{category}</span>
+                {isOpen && <span>{category}</span>}
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="sidebar-coworkers">
-          {isFrontEndSelected && (
-            <>
-              <h2>Co-workers</h2>
-              <div className="coworkers">
-                {frontEndCoworkers.slice(0, 4).map((coworker, index) =>
-                  coworker.image ? (
-                    <img
-                      key={index}
-                      src={coworker.image}
-                      alt={coworker.name}
-                      className="coworker-icon"
-                    />
-                  ) : (
-                    <Users key={index} />
-                  )
-                )}
-                {frontEndCoworkers.length > 4 && (
-                  <div
-                    className="coworker-extra"
-                    onClick={handleViewAllClick}
-                  >
-                    +{frontEndCoworkers.length - 4}
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+        {isOpen && isFrontEndSelected && (
+          <div className="sidebar-coworkers">
+            <h2>Co-workers</h2>
+            <div className="coworkers">
+              {frontEndCoworkers.slice(0, 4).map((coworker, index) =>
+                coworker.image ? (
+                  <img
+                    key={index}
+                    src={coworker.image}
+                    alt={coworker.name}
+                    className="coworker-icon"
+                  />
+                ) : (
+                  <Users key={index} />
+                )
+              )}
+              {frontEndCoworkers.length > 4 && (
+                <div 
+                  className="coworker-extra" 
+                  onClick={handleViewAllClick}
+                >
+                  +{frontEndCoworkers.length - 4}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="sidebar-footer">
           <div className="profile">
@@ -157,10 +184,12 @@ const Sidebar: React.FC = () => {
               alt="User Avatar"
               className="profile-avatar"
             />
-            <div>
-              <p className="profile-name">Tasneem Farraj</p>
-              <p className="profile-email">tasneemfarraj@gmail.com</p>
-            </div>
+            {isOpen && (
+              <div>
+                <p className="profile-name">Tasneem Farraj</p>
+                <p className="profile-email">tasneemfarraj@gmail.com</p>
+              </div>
+            )}
           </div>
         </div>
       </aside>

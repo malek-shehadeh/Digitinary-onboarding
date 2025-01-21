@@ -4,6 +4,8 @@ import Sidebar from "./components/Sidebar";
 import FrontEnd from "./pages/Front-End";
 import CoWorkersPage from "./pages/CoworkersPage"; 
 import './App.css'
+import ChatBot from "./components/ChatBot/ChatBot";
+// import ChatBot from "../src/components/ChatBot/ChatBot";
 
 
 const BackEndPage = () => <h2>Back-End Department</h2>;
@@ -30,6 +32,8 @@ function App() {
           <Route path="/product-manager" element={<ProductManagerPage />} />
           <Route path="/co-workers" element={<CoWorkersPage />} />
           </Routes>
+          <ChatBot />
+
     </div>
     </Router>
   )
