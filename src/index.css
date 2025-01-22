@@ -43,9 +43,9 @@ body {
   color: #061826;
   /* Remove display: flex and place-items as they're causing layout issues */
 }
-button:hover {
+/* button:hover {
   border-color: #646cff;
-}
+} */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

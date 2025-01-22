@@ -9,12 +9,13 @@ import {
   Box,
   Users,
   ChevronLeft,
+  ChevronRight,
   
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Style/Sidebar.scss";
 import logo from "../assets/Digitinary-Logo.png";
-import logoIcon from "../assets/digitinary_icon.png"; // Make sure you have this icon version
+import logoIcon from "../assets/digitinary_icon.png"; 
 import user1 from "../assets/user1.png";
 import user2 from "../assets/user2.png";
 import user3 from "../assets/user3.png";
@@ -27,14 +28,18 @@ import { useProject } from "../context/ProjectContext";
 const Sidebar: React.FC = () => {
   const [isFrontEndSelected, setIsFrontEndSelected] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
   const { setSelectedProject } = useProject();
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
   const menuItems = [
     {
       category: "Front-end",
-      icon: <Code className="menu-item-icon" />,
+      icon: <Code strokeWidth={1.75} className="menu-item-icon" />,
       path: "/front-end",
       onClick: () => {
         setIsFrontEndSelected(true);
@@ -43,37 +48,37 @@ const Sidebar: React.FC = () => {
     },
     {
       category: "Back-end",
-      icon: <GitMerge className="menu-item-icon" />,
+      icon: <GitMerge strokeWidth={1.75} className="menu-item-icon" />,
       path: "/back-end",
       onClick: () => setIsFrontEndSelected(false),
     },
     {
       category: "Quality Assurance",
-      icon: <BookOpenCheck className="menu-item-icon" />,
+      icon: <BookOpenCheck strokeWidth={1.75} className="menu-item-icon" />,
       path: "/qa",
       onClick: () => setIsFrontEndSelected(false),
     },
     {
       category: "Human Resource",
-      icon: <BriefcaseBusiness className="menu-item-icon" />,
+      icon: <BriefcaseBusiness strokeWidth={1.75} className="menu-item-icon" />,
       path: "/hr",
       onClick: () => setIsFrontEndSelected(false),
     },
     {
       category: "UI UX Designer",
-      icon: <Component className="menu-item-icon" />,
+      icon: <Component strokeWidth={1.75} className="menu-item-icon" />,
       path: "/ui-ux",
       onClick: () => setIsFrontEndSelected(false),
     },
     {
       category: "Financial Officer",
-      icon: <DollarSign className="menu-item-icon" />,
+      icon: <DollarSign strokeWidth={1.75} className="menu-item-icon" />,
       path: "/finance",
       onClick: () => setIsFrontEndSelected(false),
     },
     {
       category: "Product Manager",
-      icon: <Box className="menu-item-icon" />,
+      icon: <Box strokeWidth={1.75} className="menu-item-icon" />,
       path: "/product-manager",
       onClick: () => setIsFrontEndSelected(false),
     },
@@ -96,29 +101,23 @@ const Sidebar: React.FC = () => {
     setActiveCategory(category);
   };
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
 
   return (
-    <div className="sidebar-wrapper">
-      <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-      <button 
-          className="sidebar-toggle"
-          onClick={toggleSidebar}
-          aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
-          style={{
-            transform: `translateY(-50%) ${isOpen ? '' : 'rotate(180deg)'}`,
-          }}
-        >
-          <ChevronLeft 
-            className="h-5 w-5"
-            style={{
-              transform: `${isOpen ? '' : 'rotate(180deg)'}`,
-              transition: 'transform 0.3s ease-in-out'
-            }}
-          />
-        </button>
+    <div className={`sidebar-wrapper ${isOpen ? "open" : "closed"}`}>
+    <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
+      <button
+        className="sidebar-toggle"
+        onClick={toggleSidebar}
+        aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        <div className="toggle-circle">
+          {isOpen ? (
+            <ChevronLeft className="toggle-icon" />
+          ) : (
+            <ChevronRight className="toggle-icon" />
+          )}
+        </div>
+      </button>
 
         <div className="sidebar-header">
           <div className="logo">
