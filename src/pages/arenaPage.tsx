@@ -9,6 +9,7 @@ import Step5Content from './StepsProgress/Step5Content';
 import { Button } from "@/components/ui/button"
 const ArenaPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const pageRef = useRef<HTMLDivElement>(null);
   const [stepCorrectness, setStepCorrectness] = useState<{ [key: number]: boolean }>({
     1: false,
@@ -43,11 +44,24 @@ const ArenaPage: React.FC = () => {
     }
   };
 
+  const handleStepClick = (step: number) => {
+    // Only allow navigation to completed steps or the next available step
+    if (step === 1 || stepCorrectness[step - 1] || step === currentStep) {
+      setCurrentStep(step);
+    }
+  };
+
   const handleAnswerCorrect = (step: number, isCorrect: boolean) => {
     setStepCorrectness((prev) => ({
       ...prev,
       [step]: isCorrect,
     }));
+    
+    if (isCorrect) {
+      setCompletedSteps((prev) => 
+        Array.from(new Set([...prev, step - 1]))
+      );
+    }
   };
 
   const renderStepContent = () => {
@@ -71,7 +85,12 @@ const ArenaPage: React.FC = () => {
     <div className="app">
       <div ref={pageRef} className={styles.arenaPage}>
         <h1>Welcome to the Arena Project</h1>
-        <StepsProgress currentStep={currentStep} />
+        <StepsProgress 
+          currentStep={currentStep} 
+          completedSteps={completedSteps}
+          onStepClick={handleStepClick}
+          stepCorrectness={stepCorrectness}
+        />
         {renderStepContent()}
         <div className={styles.navigationButtons}>
           <Button 
@@ -86,7 +105,7 @@ const ArenaPage: React.FC = () => {
             disabled={currentStep === 5 || !stepCorrectness[currentStep]}
             className="bg-blue-500 text-white disabled:opacity-50"
           >
-            Next
+            {currentStep === 5 ? 'Finish' : 'Next'}
           </Button>
         </div>
       </div>
