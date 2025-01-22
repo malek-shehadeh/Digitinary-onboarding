@@ -13,15 +13,14 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  z-index: 1000;
+  z-index: 1000; // Ensure the sidebar is below the logo
   transition: width 0.3s ease-in-out;
   overflow: hidden;
   min-width: 60px;
-  max-width: 800px; 
+  max-width: 800px;
 
   &.open {
-    width: 700px; 
-
+    width: 700px;
   }
 
   &.closed {
