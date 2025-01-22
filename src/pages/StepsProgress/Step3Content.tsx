@@ -144,4 +144,35 @@ const Step3Content: React.FC<Step3ContentProps> = ({ onAnswerCorrect }) => {
   );
 };
 
+// Add static questions property
+Step3Content.questions = [
+  {
+    question: 'Which repository is required for the core container of the project?',
+    options: [
+      { value: 'c360', label: 'c360' },
+      { value: 'container', label: 'container' },
+      { value: 'common-layout', label: 'common-layout' },
+    ],
+    correctAnswer: 'container',
+  },
+  {
+    question: 'Which library is used for state management in the project?',
+    options: [
+      { value: 'Redux', label: 'Redux' },
+      { value: 'Context API', label: 'Context API' },
+      { value: 'Digitinary-UI', label: 'Digitinary-UI' },
+    ],
+    correctAnswer: 'Redux',
+  },
+  {
+    question: 'What is the purpose of the common-layout repository?',
+    options: [
+      { value: 'Core business logic', label: 'Core business logic' },
+      { value: 'Shared layout for consistent design', label: 'Shared layout for consistent design' },
+      { value: 'User management features', label: 'User management features' },
+    ],
+    correctAnswer: 'Shared layout for consistent design',
+  },
+];
+
 export default Step3Content;

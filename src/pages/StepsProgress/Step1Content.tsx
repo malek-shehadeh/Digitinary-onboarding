@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styles from './Step1Content.module.scss';
-import QuestionComponent from './QuestionComponent';
 import microFrontEnd from '../../assets/MicroFrontEnd.png';
-import Timer from '../../components/Timer'; 
+import { motion } from "framer-motion";
+import Timer from '../../components/Timer';
+import QuestionComponent from './QuestionComponent';
 
 interface Step1ContentProps {
   onAnswerCorrect: (isCorrect: boolean) => void;
@@ -10,9 +11,10 @@ interface Step1ContentProps {
 
 const Step1Content: React.FC<Step1ContentProps> = ({ onAnswerCorrect }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [incorrectAttempts, setIncorrectAttempts] = useState(0); // Track incorrect attempts
+  const [incorrectAttempts, setIncorrectAttempts] = useState(0);
+  const [showTimer, setShowTimer] = useState(false);
+  const [usedQuestions, setUsedQuestions] = useState<number[]>([0]);
 
-  // List of questions with options and correct answers
   const questions = [
     {
       question: 'What is the main advantage of using Micro Frontend architecture?',
@@ -43,32 +45,79 @@ const Step1Content: React.FC<Step1ContentProps> = ({ onAnswerCorrect }) => {
     },
   ];
 
+  const getRandomQuestion = () => {
+    const availableQuestions = questions
+      .map((_, index) => index)
+      .filter(index => !usedQuestions.includes(index));
+
+    if (availableQuestions.length === 0) {
+      setUsedQuestions([]);
+      return Math.floor(Math.random() * questions.length);
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+    const newQuestionIndex = availableQuestions[randomIndex];
+    setUsedQuestions([...usedQuestions, newQuestionIndex]);
+    return newQuestionIndex;
+  };
+
   const handleTryAgain = () => {
-    // Move to the next question (or loop back to the first question)
-    setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % questions.length);
+    const newIndex = getRandomQuestion();
+    setCurrentQuestionIndex(newIndex);
+    
+    if (incorrectAttempts >= 1) {
+      setShowTimer(true);
+    }
   };
 
   const handleAnswerCorrect = (isCorrect: boolean) => {
     if (!isCorrect) {
-      setIncorrectAttempts((prevAttempts) => prevAttempts + 1); // Increment incorrect attempts
+      setIncorrectAttempts(prev => prev + 1);
     } else {
-      setIncorrectAttempts(0); // Reset incorrect attempts if the answer is correct
+      setIncorrectAttempts(0);
+      setShowTimer(false);
     }
-    onAnswerCorrect(isCorrect); // Notify parent component
+    onAnswerCorrect(isCorrect);
   };
 
   const handleTimerEnd = () => {
-    setIncorrectAttempts(0); // Reset incorrect attempts
-    setCurrentQuestionIndex(0); // Reset to the first question
+    setIncorrectAttempts(0);
+    setShowTimer(false);
+    const newIndex = getRandomQuestion();
+    setCurrentQuestionIndex(newIndex);
+  };
+
+  const questionVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 20,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 30
+      }
+    }
   };
 
   return (
-    <div className={styles.step1Content}>
-      <h2>Step 1: Architecture</h2>
-
+    <motion.div 
+      className={styles.step1Content}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Micro Frontend Section */}
-      <div className={styles.card}>
-        <h3>1. Micro Frontend</h3>
+      <motion.div 
+        className={styles.card}
+        variants={questionVariants}
+        transition={{ delay: 0.2 }}
+      >
+        <h3>1. Micro Frontend Architecture</h3>
         <div className={styles.overview}>
           <h4>Overview:</h4>
           <p>
@@ -96,14 +145,17 @@ const Step1Content: React.FC<Step1ContentProps> = ({ onAnswerCorrect }) => {
         <div className={styles.structure}>
           <h4>Structure:</h4>
           <div className={styles.imagePlaceholder}>
-            {/* Display the imported image */}
-            <img src={microFrontEnd} alt="Micro Front End" className="your-image-class" />
+            <img src={microFrontEnd} alt="Micro Front End" className={styles.image} />
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Digitinary-UI Section */}
-      <div className={styles.card}>
+      <motion.div 
+        className={styles.card}
+        variants={questionVariants}
+        transition={{ delay: 0.4 }}
+      >
         <h3>2. Digitinary-UI</h3>
         <div className={styles.overview}>
           <h4>Overview:</h4>
@@ -124,20 +176,22 @@ const Step1Content: React.FC<Step1ContentProps> = ({ onAnswerCorrect }) => {
             </li>
           </ul>
         </div>
-      </div>
+      </motion.div>
 
       {/* Question Section */}
-      <div className={styles.card}>
-        <Timer
-          initialTime={15} // Set the initial time to 15 seconds
-          incorrectAttempts={incorrectAttempts} // Pass the number of incorrect attempts
-          maxAttempts={3} // Show the timer after 3 incorrect attempts
-          onTimeout={handleTimerEnd} // Callback when the timer ends
-        />
+      <motion.div className={styles.card}>
+        {showTimer && (
+          <Timer
+            initialTime={15}
+            incorrectAttempts={incorrectAttempts}
+            maxAttempts={3}
+            onTimeout={handleTimerEnd}
+          />
+        )}
 
         {incorrectAttempts < 3 && (
           <QuestionComponent
-            key={currentQuestionIndex} // Force reset when the question changes
+            key={currentQuestionIndex}
             question={questions[currentQuestionIndex].question}
             options={questions[currentQuestionIndex].options}
             correctAnswer={questions[currentQuestionIndex].correctAnswer}
@@ -145,8 +199,8 @@ const Step1Content: React.FC<Step1ContentProps> = ({ onAnswerCorrect }) => {
             onTryAgain={handleTryAgain}
           />
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
