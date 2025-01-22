@@ -41,6 +41,24 @@ const Step4Content: React.FC<Step4ContentProps> = ({ onAnswerCorrect }) => {
       ],
       correctAnswer: 'Move changes to Test for QA validation',
     },
+    {
+      question: 'What is the purpose of the Staging (STG) environment?',
+      options: [
+        { value: 'client', label: 'Client reviews and validation' },
+        { value: 'development', label: 'Active development' },
+        { value: 'testing', label: 'Unit testing' },
+      ],
+      correctAnswer: 'client',
+    },
+    {
+      question: 'When should changes be moved to the Test environment?',
+      options: [
+        { value: 'after-dev', label: 'After development verification' },
+        { value: 'before-dev', label: 'Before development' },
+        { value: 'production', label: 'After production deployment' },
+      ],
+      correctAnswer: 'after-dev',
+    },
   ];
 
   const handleTryAgain = () => {
@@ -126,5 +144,36 @@ const Step4Content: React.FC<Step4ContentProps> = ({ onAnswerCorrect }) => {
     </div>
   );
 };
+
+// Add static questions property
+Step4Content.questions = [
+  {
+    question: 'Which environment is used for ongoing development?',
+    options: [
+      { value: 'Develop', label: 'Develop' },
+      { value: 'Test', label: 'Test' },
+      { value: 'Staging (STG)', label: 'Staging (STG)' },
+    ],
+    correctAnswer: 'Develop',
+  },
+  {
+    question: 'What is the purpose of the Test environment?',
+    options: [
+      { value: 'Ongoing development', label: 'Ongoing development' },
+      { value: 'QA team verification', label: 'QA team verification' },
+      { value: 'Client reviews', label: 'Client reviews' },
+    ],
+    correctAnswer: 'QA team verification',
+  },
+  {
+    question: 'What should you do after verifying changes in the Develop environment?',
+    options: [
+      { value: 'Deploy to STG', label: 'Deploy to STG' },
+      { value: 'Move changes to Test for QA validation', label: 'Move changes to Test for QA validation' },
+      { value: 'Mark tickets as Ready for Test', label: 'Mark tickets as Ready for Test' },
+    ],
+    correctAnswer: 'Move changes to Test for QA validation',
+  },
+];
 
 export default Step4Content;

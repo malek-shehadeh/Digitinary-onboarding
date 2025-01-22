@@ -85,7 +85,7 @@ const Step5Content: React.FC<Step5ContentProps> = ({ onAnswerCorrect }) => {
         <div className={styles.overview}>
           <h4>Overview:</h4>
           <p>
-            A step-by-step guide on creating a new custom module using the project’s CLI.
+            A step-by-step guide on creating a new custom module using the project's CLI.
           </p>
         </div>
 
@@ -149,5 +149,27 @@ const Step5Content: React.FC<Step5ContentProps> = ({ onAnswerCorrect }) => {
     </div>
   );
 };
+
+// Add static questions property
+Step5Content.questions = [
+  {
+    question: 'What is the key consideration when creating a custom module?',
+    options: [
+      { value: 'reusability', label: 'Reusability and maintainability' },
+      { value: 'speed', label: 'Development speed' },
+      { value: 'cost', label: 'Development cost' },
+    ],
+    correctAnswer: 'reusability',
+  },
+  {
+    question: 'What is the first step to create a custom module?',
+    options: [
+      { value: 'planning', label: 'Planning and requirements gathering' },
+      { value: 'coding', label: 'Start coding immediately' },
+      { value: 'testing', label: 'Set up testing environment' },
+    ],
+    correctAnswer: 'planning',
+  },
+];
 
 export default Step5Content;

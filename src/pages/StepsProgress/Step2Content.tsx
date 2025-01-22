@@ -2,62 +2,75 @@ import React, { useState } from 'react';
 import styles from './Step2Content.module.scss';
 import QuestionComponent from './QuestionComponent';
 import Timer from '../../components/Timer';
+
 interface Step2ContentProps {
   onAnswerCorrect: (isCorrect: boolean) => void;
 }
 
-const Step2Content: React.FC<Step2ContentProps> = ({ onAnswerCorrect }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [incorrectAttempts, setIncorrectAttempts] = useState(0); // Track incorrect attempts
+// Questions specific to Step 2 - Business Requirements
+const step2Questions = [
+  {
+    question: 'What is the primary focus of business requirements?',
+    options: [
+      { value: 'scalability', label: 'Scalability and modularity' },
+      { value: 'objectives', label: 'Defining business objectives' },
+      { value: 'debugging', label: 'Easier debugging' },
+    ],
+    correctAnswer: 'objectives',
+  },
+  {
+    question: 'Which document outlines the key business requirements?',
+    options: [
+      { value: 'business-docs', label: 'Business Docs Link 1' },
+      { value: 'technical-docs', label: 'Technical Docs Link 2' },
+      { value: 'event-bus', label: 'Event Bus' },
+    ],
+    correctAnswer: 'business-docs',
+  },
+  {
+    question: 'What is the purpose of business requirements?',
+    options: [
+      { value: 'consistency', label: 'Maintain consistency across modules' },
+      { value: 'performance', label: 'Improve performance' },
+      { value: 'objectives', label: 'Define project objectives' },
+    ],
+    correctAnswer: 'objectives',
+  },
+];
 
-  // List of questions with options and correct answers (based on Step 2 content)
-  const questions = [
-    {
-      question: 'What is the primary focus of business requirements?',
-      options: [
-        { value: 'scalability', label: 'Scalability and modularity' },
-        { value: 'objectives', label: 'Defining business objectives' },
-        { value: 'debugging', label: 'Easier debugging' },
-      ],
-      correctAnswer: 'objectives',
-    },
-    {
-      question: 'Which document outlines the key business requirements?',
-      options: [
-        { value: 'business-docs', label: 'Business Docs Link 1' },
-        { value: 'technical-docs', label: 'Technical Docs Link 2' },
-        { value: 'event-bus', label: 'Event Bus' },
-      ],
-      correctAnswer: 'business-docs',
-    },
-    {
-      question: 'What is the purpose of business requirements?',
-      options: [
-        { value: 'consistency', label: 'Maintain consistency across modules' },
-        { value: 'performance', label: 'Improve performance' },
-        { value: 'objectives', label: 'Define project objectives' },
-      ],
-      correctAnswer: 'objectives',
-    },
-  ];
+const Step2Content: React.FC<Step2ContentProps> = ({ onAnswerCorrect }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(
+    Math.floor(Math.random() * step2Questions.length)
+  );
+  const [incorrectAttempts, setIncorrectAttempts] = useState(0);
+  const [showTimer, setShowTimer] = useState(false);
 
   const handleTryAgain = () => {
-    // Move to the next question (or loop back to the first question)
-    setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % questions.length);
+    const newIndex = Math.floor(Math.random() * step2Questions.length);
+    setCurrentQuestionIndex(newIndex);
+    if (incorrectAttempts >= 1) {
+      setShowTimer(true);
+    }
   };
 
   const handleAnswerCorrect = (isCorrect: boolean) => {
     if (!isCorrect) {
-      setIncorrectAttempts((prevAttempts) => prevAttempts + 1); // Increment incorrect attempts
+      setIncorrectAttempts(prev => prev + 1);
+      if (incorrectAttempts + 1 >= 1) {
+        setShowTimer(true);
+      }
     } else {
-      setIncorrectAttempts(0); // Reset incorrect attempts if the answer is correct
+      setIncorrectAttempts(0);
+      setShowTimer(false);
+      onAnswerCorrect(true);
     }
-    onAnswerCorrect(isCorrect); // Notify parent component
   };
 
   const handleTimerEnd = () => {
-    setIncorrectAttempts(0); // Reset incorrect attempts
-    setCurrentQuestionIndex(0); // Reset to the first question
+    setIncorrectAttempts(0);
+    setShowTimer(false);
+    const newIndex = Math.floor(Math.random() * step2Questions.length);
+    setCurrentQuestionIndex(newIndex);
   };
 
   return (
@@ -95,19 +108,21 @@ const Step2Content: React.FC<Step2ContentProps> = ({ onAnswerCorrect }) => {
 
       {/* Question Section */}
       <div className={styles.card}>
-        <Timer
-          initialTime={59} // Set the initial time to 59 seconds
-          incorrectAttempts={incorrectAttempts} // Pass the number of incorrect attempts
-          maxAttempts={3} // Show the timer after 3 incorrect attempts
-          onTimeout={handleTimerEnd} // Callback when the timer ends
-        />
+        {showTimer && (
+          <Timer
+            initialTime={15}
+            incorrectAttempts={incorrectAttempts}
+            maxAttempts={3}
+            onTimeout={handleTimerEnd}
+          />
+        )}
 
         {incorrectAttempts < 3 && (
           <QuestionComponent
-            key={currentQuestionIndex} // Force reset when the question changes
-            question={questions[currentQuestionIndex].question}
-            options={questions[currentQuestionIndex].options}
-            correctAnswer={questions[currentQuestionIndex].correctAnswer}
+            key={currentQuestionIndex}
+            question={step2Questions[currentQuestionIndex].question}
+            options={step2Questions[currentQuestionIndex].options}
+            correctAnswer={step2Questions[currentQuestionIndex].correctAnswer}
             onAnswerCorrect={handleAnswerCorrect}
             onTryAgain={handleTryAgain}
           />
@@ -116,5 +131,8 @@ const Step2Content: React.FC<Step2ContentProps> = ({ onAnswerCorrect }) => {
     </div>
   );
 };
+
+// Add static questions property for reference
+Step2Content.questions = step2Questions;
 
 export default Step2Content;

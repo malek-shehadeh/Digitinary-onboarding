@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button"
-import styles from './QuestionComponent.module.scss'; // Import the scoped styles
+import { motion, AnimatePresence } from "framer-motion";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+
 interface QuestionComponentProps {
   question: string;
   options: { value: string; label: string }[];
@@ -16,74 +18,63 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
   onAnswerCorrect,
   onTryAgain,
 }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>();
+  const [showFeedback, setShowFeedback] = useState(false);
 
-  const handleAnswerChange = (answer: string) => {
+  const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
+    setShowFeedback(true);
+    onAnswerCorrect(answer === correctAnswer);
   };
-
-  const handleSubmit = () => {
-    const isAnswerCorrect = selectedAnswer === correctAnswer;
-    setIsCorrect(isAnswerCorrect);
-    setIsSubmitted(true);
-    onAnswerCorrect(isAnswerCorrect); // Notify parent component
-  };
-
-  // Reset the state when the question changes
-  useEffect(() => {
-    setSelectedAnswer(null);
-    setIsSubmitted(false);
-    setIsCorrect(null);
-  }, [question]);
 
   return (
-    <div>
-      <h3>{question}</h3>
-      {options.map((option) => (
-        <div key={option.value}>
-          <label>
-            <input
-              type="radio"
-              name="answer"
-              value={option.value}
-              checked={selectedAnswer === option.value}
-              onChange={() => handleAnswerChange(option.value)}
-            />
+    <div className="question-component">
+      <h3 className="text-lg font-semibold mb-4">{question}</h3>
+      <div className="space-y-3">
+        {options.map((option) => (
+          <div
+            key={option.value}
+            className={`relative p-4 border rounded-lg cursor-pointer transition-all
+              ${selectedAnswer === option.value ? 'border-primary' : 'border-gray-200 hover:border-gray-300'}
+            `}
+            onClick={() => handleAnswerSelect(option.value)}
+          >
             {option.label}
-          </label>
-        </div>
-      ))}
-
-      {/* Submit Button */}
-      {!isSubmitted && (
-        <Button
-          onClick={handleSubmit}
-          disabled={!selectedAnswer}
-          className={styles.button} // Apply the scoped class
+            <AnimatePresence>
+              {selectedAnswer === option.value && selectedAnswer === correctAnswer && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                >
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
+      {showFeedback && selectedAnswer !== correctAnswer && (
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm flex items-center gap-2"
         >
-          Submit
-        </Button>
-      )}
-
-      {/* Try Again Button */}
-      {isSubmitted && !isCorrect && (
-        <Button
-          onClick={onTryAgain}
-          className={styles.button} // Apply the scoped class
-        >
-          Try Again
-        </Button>
-      )}
-
-      {/* Feedback Message */}
-      {isSubmitted && isCorrect !== null && (
-        <div style={{ color: isCorrect ? 'green' : 'red', fontWeight: 'bold', marginTop: '10px' }}>
-          {isCorrect
-            ? 'Correct answer! You can proceed to the next step.'
-            : 'Wrong answer. Please try again.'}
-        </div>
+          <AlertCircle className="h-4 w-4" />
+          <span>Incorrect answer. Please try again.</span>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => {
+              setSelectedAnswer(undefined);
+              setShowFeedback(false);
+              onTryAgain();
+            }}
+            className="ml-auto"
+          >
+            Try Again
+          </Button>
+        </motion.div>
       )}
     </div>
   );
