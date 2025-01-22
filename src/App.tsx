@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar";
 import FrontEnd from "./pages/Front-End";
 import CoWorkersPage from "./pages/CoworkersPage"; 
+import ArenaPage from "./pages/arenaPage";
 import './App.css'
 import ChatBot from "./components/ChatBot/ChatBot";
 // import ChatBot from "../src/components/ChatBot/ChatBot";
@@ -20,7 +21,7 @@ function App() {
     <Router>
       <Navbar/>
       <Sidebar />
-    <div className='text-6xl '>
+    <div className=' '>
       <Routes>
           <Route path="/" element={<h2>Welcome to the Digitinary</h2>} />
           <Route path="/front-end" element={<FrontEnd />} />
@@ -31,6 +32,7 @@ function App() {
           <Route path="/finance" element={<FinancePage />} />
           <Route path="/product-manager" element={<ProductManagerPage />} />
           <Route path="/co-workers" element={<CoWorkersPage />} />
+          <Route path="/arena" element={<ArenaPage />} />
           </Routes>
           <ChatBot />
 

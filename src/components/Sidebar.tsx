@@ -1,5 +1,3 @@
-
-// Sidebar.tsx
 import React, { useState} from "react";
 import {
   Code,
@@ -24,19 +22,24 @@ import user4 from "../assets/user4.png";
 import user5 from "../assets/user5.png";
 import user6 from "../assets/user6.png";
 import tasneemAvatar from "../assets/taneemAvater.png";
+import { useProject } from "../context/ProjectContext";
 
 const Sidebar: React.FC = () => {
   const [isFrontEndSelected, setIsFrontEndSelected] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
+  const { setSelectedProject } = useProject();
 
   const menuItems = [
     {
       category: "Front-end",
       icon: <Code className="menu-item-icon" />,
       path: "/front-end",
-      onClick: () => setIsFrontEndSelected(true),
+      onClick: () => {
+        setIsFrontEndSelected(true);
+        setSelectedProject(null);
+      },
     },
     {
       category: "Back-end",
