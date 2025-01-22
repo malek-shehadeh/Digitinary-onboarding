@@ -1,0 +1,49 @@
+
+@use "sass:color";
+
+// Theme mode settings
+:root {
+  // Light theme default colors
+  --primary-color: #4068df;
+  --primary-light: #{color.adjust(#4068df, $lightness: 10%)};
+  --primary-dark: #{color.adjust(#4068df, $lightness: -10%)};
+  --secondary-color: #42c9c2;
+  --secondary-light: #{color.adjust(#42c9c2, $lightness: 10%)};
+  --secondary-dark: #{color.adjust(#42c9c2, $lightness: -10%)};
+  --background-color: #ffffff;
+  --paper-background: #f8f9fa;
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --border-color: #e5e5e5;
+  --hover-bg: #f5f5f5;
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #888;
+  --scrollbar-thumb-hover: #555;
+}
+
+[data-theme="dark"] {
+  --primary-color: #{color.adjust(#4068df, $lightness: 10%)};
+  --primary-light: #{color.adjust(#4068df, $lightness: 20%)};
+  --primary-dark: #4068df;
+  --secondary-color: #{color.adjust(#42c9c2, $lightness: 10%)};
+  --secondary-light: #{color.adjust(#42c9c2, $lightness: 20%)};
+  --secondary-dark: #42c9c2;
+  --background-color: #1a1a1a;
+  --paper-background: #2d2d2d;
+  --text-color: #ffffff;
+  --text-secondary: #b3b3b3;
+  --border-color: #404040;
+  --hover-bg: #3d3d3d;
+  --scrollbar-track: #2d2d2d;
+  --scrollbar-thumb: #666;
+  --scrollbar-thumb-hover: #888;
+}
+
+// SCSS Variables
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 2rem;
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
